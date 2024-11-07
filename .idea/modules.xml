@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/EssentialTremor_Doctor.iml" filepath="$PROJECT_DIR$/.idea/EssentialTremor_Doctor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EssentialTremor_Doctor.iml" filepath="$PROJECT_DIR$/EssentialTremor_Doctor.iml" />
     </modules>
   </component>
 </project>

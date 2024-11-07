@@ -2,7 +2,6 @@ package pojos;
 
 import data.ACC;
 import data.EMG;
-import jdbc.ConnectionManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,10 +36,6 @@ public class Doctor {
      * List of doctors notes the doctor redacts
      */
     private List<DoctorsNote> doctorsNotes;
-    /**
-     * Acces to the data base
-     */
-    private ConnectionManager access;
 
     /**
      * Empty constructor
@@ -116,12 +111,12 @@ public class Doctor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Doctor doctor = (Doctor) o;
-        return Objects.equals(name, doctor.name) && Objects.equals(surname, doctor.surname) && Objects.equals(patients, doctor.patients) && Objects.equals(access, doctor.access);
+        return Objects.equals(name, doctor.name) && Objects.equals(surname, doctor.surname) && Objects.equals(patients, doctor.patients);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, surname, patients, access);
+        return Objects.hash(name, surname, patients);
     }
 
     public void setPatients(List<Patient> patients) {
@@ -148,9 +143,6 @@ public class Doctor {
         this.userId = userId;
     }
 
-    public ConnectionManager getAccess() {
-        return access;
-    }
 
     /**
      * Chooses a patient from the doctors patients list
@@ -326,33 +318,5 @@ public class Doctor {
         printWriter.println(getName());
         printWriter.println(getSurname());
         printWriter.println(doctorsNote.getNotes());
-    }
-
-    private void addPatient() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("- Name: ");
-        String name = sc.nextLine();
-        System.out.println("- Surname: ");
-        String surname = sc.nextLine();
-        System.out.println("- Genetic background: (y/n)");
-        String genBackCheck = sc.nextLine();
-        Boolean genBack = null;
-        //check
-        Boolean valid = false;
-        while (!valid) {
-            if (genBackCheck.equals("y")) {
-                valid = true;
-                genBack = true;
-            } else if (genBackCheck.equals("n")) {
-                valid = true;
-                genBack = false;
-            } else {
-                System.out.println("---NOT A VALID INPUT, PLEASE TRY AGAIN...");
-            }
-        }
-        Patient patient = new Patient(name, surname, genBack);
-        patient.getDoctors().add(this);
-        this.getPatients().add(patient);
-        sc.close();
     }
 }
