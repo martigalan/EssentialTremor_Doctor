@@ -18,15 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MainServer {
-
-    public static ConnectionManager connectionManager;
-    public static JDBCUserManager userManager;
-    public static JDBCDoctorManager doctorManager;
-    public static JDBCDoctorNotesManager doctorNotesManager;
-    public static JDBCMedicalRecordManager medicalRecordManager;
-    public static JDBCPatientManager patientManager;
-    public static JDBCStateManager stateManager;
-    public static JDBCTreatmentManager treatmentManager;
     private static boolean control;
     private static Scanner sc = new Scanner(System.in);
     private static Doctor doctor;
@@ -42,14 +33,6 @@ public class MainServer {
         boolean conexion = true;
 
         try {
-            connectionManager = new ConnectionManager();
-            userManager = new JDBCUserManager(connectionManager);
-            doctorManager = new JDBCDoctorManager(connectionManager);
-            doctorNotesManager = new JDBCDoctorNotesManager(connectionManager);
-            medicalRecordManager = new JDBCMedicalRecordManager(connectionManager);
-            patientManager = new JDBCPatientManager(connectionManager);
-            stateManager = new JDBCStateManager(connectionManager);
-            treatmentManager = new JDBCTreatmentManager(connectionManager);
 
             //Create socket
             serverSocket = new ServerSocket(9000);
@@ -63,9 +46,6 @@ public class MainServer {
                     printWriter = new PrintWriter(MainServer.clientSocket.getOutputStream(), true);
                     bufferedReader = new BufferedReader(new InputStreamReader(MainServer.clientSocket.getInputStream()));
 
-                    // Tables for state and treatment are created MAINTAIN?
-                    stateManager.addState();
-                    treatmentManager.addTreatment();
 
                     int option;
                     try {
