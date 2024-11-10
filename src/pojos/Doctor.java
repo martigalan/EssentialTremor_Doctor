@@ -241,7 +241,35 @@ public class Doctor {
         Scanner sc = new Scanner(System.in);
         System.out.println("\n Write any comments about the medical record (No enters): ");
         String comments = sc.nextLine();
-        DoctorsNote doctorsNote = new DoctorsNote(comments);
+        //loops to chose a state and a treatment
+        State st = null;
+        Treatment trt = null;
+        while (st == null) {
+            System.out.println("Choose a state for the patient:");
+            for (State state : State.values()) {
+                System.out.println(state.ordinal() + 1 + ": " + state + " - " + state.getDescription());
+            }
+            int stateChoice = sc.nextInt();
+            if (stateChoice >= 1 && stateChoice <= State.values().length) {
+                st = State.values()[stateChoice - 1];
+            } else {
+                System.out.println("Invalid choice. Please try again.");
+            }
+        }
+        while (trt == null) {
+            System.out.println("Choose a treatment for the patient:");
+            for (Treatment treatment : Treatment.values()) {
+                System.out.println(treatment.ordinal() + 1 + ": " + treatment + " - " + treatment.getDescription());
+            }
+            int treatmentChoice = sc.nextInt();
+            if (treatmentChoice >= 1 && treatmentChoice <= Treatment.values().length) {
+                trt = Treatment.values()[treatmentChoice - 1];
+            } else {
+                System.out.println("Invalid choice. Please try again.");
+            }
+        }
+
+        DoctorsNote doctorsNote = new DoctorsNote(comments, st, trt);
         sc.close();
         medicalRecord.getDoctorsNotes().add(doctorsNote);
         this.getDoctorsNote().add(doctorsNote);
@@ -318,5 +346,7 @@ public class Doctor {
         printWriter.println(getName());
         printWriter.println(getSurname());
         printWriter.println(doctorsNote.getNotes());
+        printWriter.println(doctorsNote.getState());
+        printWriter.println(doctorsNote.getTreatment());
     }
 }

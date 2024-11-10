@@ -244,10 +244,15 @@ public class Patient implements Runnable{
                 System.out.println(doctorSurname);
                 String notes = bufferedReader.readLine();
                 System.out.println(notes);
+                State st = State.valueOf(bufferedReader.readLine());
+                System.out.println(st);
+                Treatment trt = Treatment.valueOf(bufferedReader.readLine());
+                System.out.println(trt);
+
 
                 releaseReceivingResources(bufferedReader, socket, serverSocket);
 
-                doctorsNote = new DoctorsNote(doctorName, doctorSurname, notes);
+                doctorsNote = new DoctorsNote(doctorName, doctorSurname, notes, st, trt);
                 //TODO meter esto en lista doctor
                 //TODO this is in the main
                 //DoctorsNote doctorsNote = createDoctorsNote(medicalRecord);
