@@ -1,5 +1,7 @@
 package mainServer;
 
+import data.ACC;
+import data.EMG;
 import pojos.*;
 
 import java.io.*;
@@ -8,9 +10,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static pojos.Doctor.splitToIntegerList;
+import static pojos.Doctor.splitToStringList;
 
 public class MainDoctor {
     private static Scanner sc = new Scanner(System.in);
@@ -28,7 +34,6 @@ public class MainDoctor {
             printWriter = new PrintWriter(socket.getOutputStream(), true);
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             inputStream = socket.getInputStream();
-
 
             int option;
             try {
@@ -124,6 +129,15 @@ public class MainDoctor {
         String doctorData = name + "|" + surname + "|" + username + "|" + encryptedPassword + "|doctor";
         printWriter.println(doctorData);  //Send to server
         System.out.println("Doctor and user data sent to the server for registration.");
+
+        String approval = bufferedReader.readLine();
+        if (approval.equals("REGISTER_SUCCESS")) {
+            System.out.println("Doctor registered correctly.");
+            return;
+        } else {
+            System.out.println("Couldn't register doctor. Please try again");
+            return;
+        }
     }
     public static void login() throws IOException, NoSuchAlgorithmException {
         Scanner sc = new Scanner(System.in);
@@ -157,11 +171,9 @@ public class MainDoctor {
             }
         } else {
             System.out.println("Login failed. Please try again.");
+            return;
         }
     }
-
-
-
 
     public static void menuUser() throws IOException {
         int option;
@@ -179,12 +191,7 @@ public class MainDoctor {
 
             switch (option) {
                 case 1: {
-                    mr = doctor.receiveMedicalRecord(socket, bufferedReader);
-                    if (mr != null) {
-                        //TODO esto se guarda en sevridor antes de mandar al doctor
-                        doctor.getMedicalRecords().add(mr);
-                    }
-                    break;
+                    receiveMedicalRecord();
                 }
                 case 2: {
                     if (mr != null) {
@@ -207,7 +214,8 @@ public class MainDoctor {
         System.out.println("@@                                                                  @@");
         System.out.println("@@                 Welcome.                                         @@");
         System.out.println("@@                 1. Receive medical record                        @@");
-        System.out.println("@@                 2. Show medical record                           @@");
+        System.out.println("@@                 2. Open medical record                           @@");
+        System.out.println("@@                 3. Send Doctors Note                             @@");
         System.out.println("@@                 0. Exit                                          @@");
         System.out.println("@@                                                                  @@");
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -225,6 +233,50 @@ public class MainDoctor {
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         System.out.print("\nSelect an option: ");
     }
+
+    /**
+     * Receive medical record sent by the doctor
+     *
+     * @return Medical Record sent by the doctor
+     * @throws IOException in case connection fails
+     */
+    private static void receiveMedicalRecord() throws IOException {
+        MedicalRecord medicalRecord = null;
+        String command = "MedicalRecord";
+        printWriter.println(command);
+
+        String response = bufferedReader.readLine();
+        if (response.equals("SEND_MEDICALRECORD")) {
+            String patientName = bufferedReader.readLine();
+            String patientSurname = bufferedReader.readLine();
+            int age = Integer.parseInt(bufferedReader.readLine());
+            double weight = Double.parseDouble(bufferedReader.readLine());
+            int height = Integer.parseInt(bufferedReader.readLine());
+            String symptoms = bufferedReader.readLine();
+            List<String> listSymptoms = splitToStringList(symptoms);
+
+            String time = bufferedReader.readLine();
+            List<Integer> listTime = splitToIntegerList(time);
+            String acc = bufferedReader.readLine();
+            List<Integer> listAcc = splitToIntegerList(acc);
+            String emg = bufferedReader.readLine();
+            List<Integer> listEmg = splitToIntegerList(emg);
+            boolean geneticBackground = Boolean.parseBoolean(bufferedReader.readLine());
+
+            ACC acc1 = new ACC(listAcc, listTime);
+            EMG emg1 = new EMG(listEmg, listTime);
+            medicalRecord = new MedicalRecord(patientName, patientSurname, age, weight, height, listSymptoms, acc1, emg1, geneticBackground);
+            if (medicalRecord != null) {
+                printWriter.println("MEDICALRECORD_SUCCESS");
+                doctor.getMedicalRecords().add(medicalRecord);
+            } else {
+                printWriter.println("MEDICALRECORD_FAILED");
+            }
+        } else {
+            System.out.println("Failed to receive the medical record.");
+        }
+    }
+
 
     public static DoctorsNote chooseToDoDoctorNotes(MedicalRecord mr) {
         System.out.println("\nDo you want to create a doctors note? (y/n)");
