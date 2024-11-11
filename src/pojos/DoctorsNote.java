@@ -1,5 +1,8 @@
 package pojos;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 public class DoctorsNote {
 
     /**
@@ -15,13 +18,17 @@ public class DoctorsNote {
      */
     private String notes;
     /**
-     * State assiganed to the patient by the doctor
+     * State assigned to the patient by the doctor
      */
     private State state;
     /**
      * Treatment the patient should undergo
      */
     private Treatment treatment;
+    /**
+     * Date of creation
+     */
+    private LocalDate date;
 
 
     /**
@@ -34,6 +41,7 @@ public class DoctorsNote {
         this.notes = notes;
         this.state = state;
         this.treatment = treatment;
+        this.date = LocalDate.now();
     }
 
     /**
@@ -50,6 +58,11 @@ public class DoctorsNote {
         this.notes = notes;
         this.state = state;
         this.treatment = treatment;
+        this.date = LocalDate.now();
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 
     public String getDoctorName() {

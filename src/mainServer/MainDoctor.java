@@ -1,7 +1,5 @@
 package mainServer;
 
-import data.ACC;
-import data.EMG;
 import pojos.*;
 
 import java.io.*;
@@ -10,13 +8,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static pojos.Doctor.splitToIntegerList;
-import static pojos.Doctor.splitToStringList;
 
 public class MainDoctor {
     private static Scanner sc = new Scanner(System.in);
@@ -34,6 +28,7 @@ public class MainDoctor {
             printWriter = new PrintWriter(socket.getOutputStream(), true);
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             inputStream = socket.getInputStream();
+
 
             int option;
             try {
