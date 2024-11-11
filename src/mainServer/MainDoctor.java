@@ -124,6 +124,14 @@ public class MainDoctor {
         String doctorData = name + "|" + surname + "|" + username + "|" + encryptedPassword + "|doctor";
         printWriter.println(doctorData);  //Send to server
         System.out.println("Doctor and user data sent to the server for registration.");
+        String approval = bufferedReader.readLine();
+        if (approval.equals("REGISTER_SUCCESS")){
+            System.out.println("Doctor registered correctly.");
+            return;
+        } else {
+            System.out.println("Couldn't register doctor. Please try again");
+            return;
+        }
     }
     public static void login() throws IOException, NoSuchAlgorithmException {
         Scanner sc = new Scanner(System.in);
@@ -157,6 +165,7 @@ public class MainDoctor {
             }
         } else {
             System.out.println("Login failed. Please try again.");
+            return;
         }
     }
 
