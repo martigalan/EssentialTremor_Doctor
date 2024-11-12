@@ -1,13 +1,17 @@
 package mainServer;
 
-import pojos.*;
+import data.ACC;
+import data.EMG;
+import pojos.Doctor;
+import pojos.DoctorsNote;
+import pojos.MedicalRecord;
 
 import java.io.*;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,6 +56,8 @@ public class MainDoctor {
                             break;
                         case 0:
                             control = false;
+                            //return "exit" to close communication
+                            printWriter.println("exit");
                             break;
                         default:
                             System.out.println("  NOT AN OPTION \n");
@@ -191,13 +197,23 @@ public class MainDoctor {
                 case 2: {
                     if (mr != null) {
                         doctor.showInfoMedicalRecord(mr);
-                        //TODO option to create doctor note
+                        //option to create doctor note
                         DoctorsNote dn = chooseToDoDoctorNotes(mr);
                         chooseToSendDoctorNotes(dn);
                     } else {
                         System.out.println("No medical record detected, please select option one");
                         break;
                     }
+                }
+                case 0: {
+                    control = false;
+                    //return "exit" to close communication
+                    printWriter.println("exit");
+                    break;
+                }
+                default:{
+                    System.out.println("  NOT AN OPTION \n");
+                    break;
                 }
             }
         }
@@ -210,7 +226,6 @@ public class MainDoctor {
         System.out.println("@@                 Welcome.                                         @@");
         System.out.println("@@                 1. Receive medical record                        @@");
         System.out.println("@@                 2. Open medical record                           @@");
-        System.out.println("@@                 3. Send Doctors Note                             @@");
         System.out.println("@@                 0. Exit                                          @@");
         System.out.println("@@                                                                  @@");
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -236,11 +251,35 @@ public class MainDoctor {
      * @throws IOException in case connection fails
      */
     private static void receiveMedicalRecord() throws IOException {
-        MedicalRecord medicalRecord = null;
         String command = "MedicalRecord";
         printWriter.println(command);
 
-        String response = bufferedReader.readLine();
+        //search doctor_id by name and surname
+        String name = doctor.getName();
+        String surname = doctor.getSurname();
+        printWriter.println(name);
+        printWriter.println(surname);
+
+        //print all the available patients, doctor chooses one and then its associated to them
+        String response;
+        while ((response = bufferedReader.readLine()) != null ){
+            System.out.println(response);
+        }
+        //choose id of patient
+        Integer p_id = sc.nextInt();
+        printWriter.println(p_id);
+
+        //get ids and dates of the medical records from the chosen patient
+        while ((response = bufferedReader.readLine()) != null ){
+            System.out.println(response);
+        }
+        //choose id of medical record
+        Integer mr_id = sc.nextInt();
+        printWriter.println(mr_id);
+        //obtain medical record
+        MedicalRecord medicalRecord = null;
+
+        response = bufferedReader.readLine();
         if (response.equals("SEND_MEDICALRECORD")) {
             String patientName = bufferedReader.readLine();
             String patientSurname = bufferedReader.readLine();
@@ -248,14 +287,14 @@ public class MainDoctor {
             double weight = Double.parseDouble(bufferedReader.readLine());
             int height = Integer.parseInt(bufferedReader.readLine());
             String symptoms = bufferedReader.readLine();
-            List<String> listSymptoms = splitToStringList(symptoms);
+            List<String> listSymptoms= doctor.splitToStringList(symptoms);
 
             String time = bufferedReader.readLine();
-            List<Integer> listTime = splitToIntegerList(time);
+            List<Integer> listTime = doctor.splitToIntegerList(time);
             String acc = bufferedReader.readLine();
-            List<Integer> listAcc = splitToIntegerList(acc);
+            List<Integer> listAcc = doctor.splitToIntegerList(acc);
             String emg = bufferedReader.readLine();
-            List<Integer> listEmg = splitToIntegerList(emg);
+            List<Integer> listEmg = doctor.splitToIntegerList(emg);
             boolean geneticBackground = Boolean.parseBoolean(bufferedReader.readLine());
 
             ACC acc1 = new ACC(listAcc, listTime);
