@@ -172,7 +172,6 @@ public class MainDoctor {
             }
         } else {
             System.out.println("Login failed. Please try again.");
-            return;
         }
     }
 
@@ -192,7 +191,7 @@ public class MainDoctor {
 
             switch (option) {
                 case 1: {
-                    receiveMedicalRecord();
+                    mr = receiveMedicalRecord();
                 }
                 case 2: {
                     if (mr != null) {
@@ -250,7 +249,7 @@ public class MainDoctor {
      * @return Medical Record sent by the doctor
      * @throws IOException in case connection fails
      */
-    private static void receiveMedicalRecord() throws IOException {
+    private static MedicalRecord receiveMedicalRecord() throws IOException {
         String command = "MedicalRecord";
         printWriter.println(command);
 
@@ -266,6 +265,7 @@ public class MainDoctor {
             System.out.println(response);
         }
         //choose id of patient
+        System.out.println("Please choose the patient ID: ");
         Integer p_id = sc.nextInt();
         printWriter.println(p_id);
 
@@ -274,6 +274,7 @@ public class MainDoctor {
             System.out.println(response);
         }
         //choose id of medical record
+        System.out.println("Please choose the medical record ID: ");
         Integer mr_id = sc.nextInt();
         printWriter.println(mr_id);
         //obtain medical record
@@ -300,15 +301,20 @@ public class MainDoctor {
             ACC acc1 = new ACC(listAcc, listTime);
             EMG emg1 = new EMG(listEmg, listTime);
             medicalRecord = new MedicalRecord(patientName, patientSurname, age, weight, height, listSymptoms, acc1, emg1, geneticBackground);
+            //set mr id for later use
+            medicalRecord.setId(mr_id);
             if (medicalRecord != null) {
                 printWriter.println("MEDICALRECORD_SUCCESS");
                 doctor.getMedicalRecords().add(medicalRecord);
+                return medicalRecord;
             } else {
                 printWriter.println("MEDICALRECORD_FAILED");
+                return medicalRecord;
             }
         } else {
             System.out.println("Failed to receive the medical record.");
         }
+        return medicalRecord;
     }
 
 
@@ -332,7 +338,8 @@ public class MainDoctor {
         System.out.println("\nDo you want to send a doctors note? (y/n)");
         String option = sc.nextLine();
         if (option.equalsIgnoreCase("y")) {
-            doctor.sendDoctorsNote(dn, printWriter);
+            //doctor.sendDoctorsNote(dn, printWriter);
+            sendDoctorsNote(dn, printWriter);
         } else if (!option.equalsIgnoreCase("y") || !option.equalsIgnoreCase("n")) {
             System.out.println("Not a valid option, try again...");
             chooseToSendDoctorNotes(dn);
@@ -347,6 +354,31 @@ public class MainDoctor {
                     + Character.digit(hex.charAt(i + 1), 16));
         }
         return data;
+    }
+
+    public static void sendDoctorsNote(DoctorsNote doctorsNote, PrintWriter printWriter) throws IOException {
+        System.out.println("Sending text");
+
+        String comment = "DoctorsNote";
+        printWriter.println(comment);
+
+        printWriter.println(doctorsNote.getDoctorName());
+        printWriter.println(doctorsNote.getDoctorSurname());
+        printWriter.println(doctorsNote.getNotes());
+        printWriter.println(doctorsNote.getState());
+        printWriter.println(doctorsNote.getTreatment());
+        String dateTxt = String.valueOf(doctorsNote.getDate());
+        //format of dateTxt = "Wed Nov 13 13:44:33 CET 2024"
+        printWriter.println(dateTxt);
+        //send mr_id (medical records its associated to)
+        printWriter.println(doctorsNote.getMr_id());
+
+        String approval = bufferedReader.readLine();
+        if (approval.equals("DOCTORNOTE_SUCCESS")){
+            System.out.println("Doctors Note sent correctly");
+        } else{
+            System.out.println("Couldn't send Doctors Note. Please try again.");
+        }
     }
 
 }

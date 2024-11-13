@@ -29,6 +29,10 @@ public class DoctorsNote {
      * Date of creation
      */
     private LocalDate date;
+    /**
+     * Medical record id thats is associated to
+     */
+    private Integer mr_id;
 
 
     /**
@@ -63,6 +67,18 @@ public class DoctorsNote {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Integer getMr_id() {
+        return mr_id;
+    }
+
+    public void setMr_id(Integer mr_id) {
+        this.mr_id = mr_id;
     }
 
     public String getDoctorName() {

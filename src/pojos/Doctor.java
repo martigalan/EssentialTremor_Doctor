@@ -270,6 +270,8 @@ public class Doctor {
         }
 
         DoctorsNote doctorsNote = new DoctorsNote(comments, st, trt);
+        //set mr_id for later use
+        doctorsNote.setMr_id(medicalRecord.getId());
         sc.close();
         medicalRecord.getDoctorsNotes().add(doctorsNote);
         this.getDoctorsNote().add(doctorsNote);
