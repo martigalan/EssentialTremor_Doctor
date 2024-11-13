@@ -337,16 +337,22 @@ public class Doctor {
     /**
      * Send Doctors Note to patient
      * @param doctorsNote Doctors Note based on the received record
-     * @param socket connection with the client
      * @param printWriter used to send data
      * @throws IOException
      */
-    public void sendDoctorsNote(DoctorsNote doctorsNote, Socket socket,PrintWriter printWriter) throws IOException {
+    public void sendDoctorsNote(DoctorsNote doctorsNote, PrintWriter printWriter) throws IOException {
         System.out.println("Sending text");
+
+        String comment = "DoctorsNote";
+        printWriter.println(comment);
+
         printWriter.println(getName());
         printWriter.println(getSurname());
         printWriter.println(doctorsNote.getNotes());
         printWriter.println(doctorsNote.getState());
         printWriter.println(doctorsNote.getTreatment());
+        String dateTxt = String.valueOf(doctorsNote.getDate());
+        //format od dateTxt = "Wed Nov 13 13:44:33 CET 2024"
+        printWriter.println(dateTxt);
     }
 }

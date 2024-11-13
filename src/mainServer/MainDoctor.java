@@ -332,7 +332,7 @@ public class MainDoctor {
         System.out.println("\nDo you want to send a doctors note? (y/n)");
         String option = sc.nextLine();
         if (option.equalsIgnoreCase("y")) {
-            doctor.sendDoctorsNote(dn, socket, printWriter);
+            doctor.sendDoctorsNote(dn, printWriter);
         } else if (!option.equalsIgnoreCase("y") || !option.equalsIgnoreCase("n")) {
             System.out.println("Not a valid option, try again...");
             chooseToSendDoctorNotes(dn);
