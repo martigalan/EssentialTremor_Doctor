@@ -33,6 +33,9 @@ public class MainDoctor {
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             inputStream = socket.getInputStream();
 
+            //sending the role to start the PatientHandler
+            String role = "Doctor";
+            printWriter.println(role);
 
             int option;
             try {
@@ -97,6 +100,7 @@ public class MainDoctor {
 
         while (true) {
             System.out.print("Name: ");
+            sc.nextLine();
             name = sc.nextLine().trim();
             if (!name.isEmpty()) break;
             System.out.println("Invalid name. Please enter a valid name.");
@@ -131,15 +135,17 @@ public class MainDoctor {
         printWriter.println(doctorData);  //Send to server
         System.out.println("Doctor and user data sent to the server for registration.");
 
+        String hola = bufferedReader.readLine();
+        System.out.println(hola);
         String approval = bufferedReader.readLine();
+        System.out.println(approval);
         if (approval.equals("REGISTER_SUCCESS")) {
             System.out.println("Doctor registered correctly.");
-            return;
         } else {
             System.out.println("Couldn't register doctor. Please try again");
-            return;
         }
     }
+
     public static void login() throws IOException, NoSuchAlgorithmException {
         Scanner sc = new Scanner(System.in);
         System.out.print("Username: ");
@@ -162,14 +168,11 @@ public class MainDoctor {
 
         String response = bufferedReader.readLine(); //receive response from server
         if (response.equals("LOGIN_SUCCESS")) {
-            String roleResponse = bufferedReader.readLine();
-            if (roleResponse.equals("WELCOME_DOCTOR")) {
-                String doctorData = bufferedReader.readLine();
-                String[] doctorInfo = doctorData.split("\\|");
-                Doctor doctor = new Doctor(doctorInfo[0], doctorInfo[1]);
-                System.out.println("Welcome, " + doctor.getName() + " " + doctor.getSurname());
-                menuUser();
-            }
+            String doctorData = bufferedReader.readLine();
+            String[] doctorInfo = doctorData.split("\\|");
+            Doctor doctor = new Doctor(doctorInfo[0], doctorInfo[1]);
+            System.out.println("Welcome, " + doctor.getName() + " " + doctor.getSurname());
+            menuUser();
         } else {
             System.out.println("Login failed. Please try again.");
         }
@@ -210,7 +213,7 @@ public class MainDoctor {
                     printWriter.println("exit");
                     break;
                 }
-                default:{
+                default: {
                     System.out.println("  NOT AN OPTION \n");
                     break;
                 }
@@ -261,7 +264,7 @@ public class MainDoctor {
 
         //print all the available patients, doctor chooses one and then its associated to them
         String response;
-        while ((response = bufferedReader.readLine()) != null ){
+        while ((response = bufferedReader.readLine()) != null) {
             System.out.println(response);
         }
         //choose id of patient
@@ -270,7 +273,7 @@ public class MainDoctor {
         printWriter.println(p_id);
 
         //get ids and dates of the medical records from the chosen patient
-        while ((response = bufferedReader.readLine()) != null ){
+        while ((response = bufferedReader.readLine()) != null) {
             System.out.println(response);
         }
         //choose id of medical record
@@ -288,7 +291,7 @@ public class MainDoctor {
             double weight = Double.parseDouble(bufferedReader.readLine());
             int height = Integer.parseInt(bufferedReader.readLine());
             String symptoms = bufferedReader.readLine();
-            List<String> listSymptoms= doctor.splitToStringList(symptoms);
+            List<String> listSymptoms = doctor.splitToStringList(symptoms);
 
             String time = bufferedReader.readLine();
             List<Integer> listTime = doctor.splitToIntegerList(time);
@@ -374,9 +377,9 @@ public class MainDoctor {
         printWriter.println(doctorsNote.getMr_id());
 
         String approval = bufferedReader.readLine();
-        if (approval.equals("DOCTORNOTE_SUCCESS")){
+        if (approval.equals("DOCTORNOTE_SUCCESS")) {
             System.out.println("Doctors Note sent correctly");
-        } else{
+        } else {
             System.out.println("Couldn't send Doctors Note. Please try again.");
         }
     }
