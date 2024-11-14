@@ -131,12 +131,15 @@ public class MainDoctor {
         }
         String encryptedPassword = sb.toString();
 
+        String command = "register";
+        printWriter.println(command);
+
         String doctorData = name + "|" + surname + "|" + username + "|" + encryptedPassword + "|doctor";
         printWriter.println(doctorData);  //Send to server
         System.out.println("Doctor and user data sent to the server for registration.");
 
-        String hola = bufferedReader.readLine();
-        System.out.println(hola);
+        //String hola = bufferedReader.readLine();
+        //System.out.println(hola);
         String approval = bufferedReader.readLine();
         System.out.println(approval);
         if (approval.equals("REGISTER_SUCCESS")) {
