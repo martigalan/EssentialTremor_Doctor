@@ -138,8 +138,6 @@ public class MainDoctor {
         printWriter.println(doctorData);  //Send to server
         System.out.println("Doctor and user data sent to the server for registration.");
 
-        //String hola = bufferedReader.readLine();
-        //System.out.println(hola);
         String approval = bufferedReader.readLine();
         System.out.println(approval);
         if (approval.equals("REGISTER_SUCCESS")) {
@@ -150,6 +148,9 @@ public class MainDoctor {
     }
 
     public static void login() throws IOException, NoSuchAlgorithmException {
+        String command = "login";
+        printWriter.println(command);
+
         Scanner sc = new Scanner(System.in);
         System.out.print("Username: ");
         String username = sc.nextLine();
@@ -173,7 +174,7 @@ public class MainDoctor {
         if (response.equals("LOGIN_SUCCESS")) {
             String doctorData = bufferedReader.readLine();
             String[] doctorInfo = doctorData.split("\\|");
-            Doctor doctor = new Doctor(doctorInfo[0], doctorInfo[1]);
+            doctor = new Doctor(doctorInfo[0], doctorInfo[1]);
             System.out.println("Welcome, " + doctor.getName() + " " + doctor.getSurname());
             menuUser();
         } else {
@@ -267,8 +268,12 @@ public class MainDoctor {
 
         //print all the available patients, doctor chooses one and then its associated to them
         String response;
-        while ((response = bufferedReader.readLine()) != null) {
+        Integer numberOfPatients = Integer.parseInt(bufferedReader.readLine());
+        Integer i = 0;
+        while (i < numberOfPatients) {
+            response = bufferedReader.readLine();
             System.out.println(response);
+            i++;
         }
         //choose id of patient
         System.out.println("Please choose the patient ID: ");
@@ -276,8 +281,12 @@ public class MainDoctor {
         printWriter.println(p_id);
 
         //get ids and dates of the medical records from the chosen patient
-        while ((response = bufferedReader.readLine()) != null) {
+        Integer numberOfMR = Integer.parseInt(bufferedReader.readLine());
+        i = 0;
+        while (i < numberOfMR) {
+            response = bufferedReader.readLine();
             System.out.println(response);
+            i++;
         }
         //choose id of medical record
         System.out.println("Please choose the medical record ID: ");
