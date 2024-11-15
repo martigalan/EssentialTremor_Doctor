@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class Patient implements Runnable{
+public class Patient{
     /**
      * Patient name
      */
@@ -36,22 +36,6 @@ public class Patient implements Runnable{
      * A list of the doctors that the patient has
      */
     private List<Doctor> doctors;
-    private int id;
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /**
-     * Empty constructor
-     */
-    public Patient() {
-    }
 
     /**
      * Constructor
@@ -177,7 +161,6 @@ public class Patient implements Runnable{
      * @throws IOException in case the connection fails
      */
     private void sendMedicalRecord(MedicalRecord medicalRecord, Socket socket) throws IOException {
-        //TODO send info, CHECK
         PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
         System.out.println("Connection established... sending text");
         printWriter.println(medicalRecord.getPatientName());
@@ -227,7 +210,6 @@ public class Patient implements Runnable{
      * @throws IOException in case connection fails
      */
     private DoctorsNote receiveDoctorsNote()throws IOException {
-        //TODO check this one
         DoctorsNote doctorsNote = null;
         try (ServerSocket serverSocket = new ServerSocket(9009)) {  // Puerto 9009 para coincidir con el cliente
             System.out.println("Server started, waiting for client...");
@@ -253,8 +235,8 @@ public class Patient implements Runnable{
                 releaseReceivingResources(bufferedReader, socket, serverSocket);
 
                 doctorsNote = new DoctorsNote(doctorName, doctorSurname, notes, st, trt);
-                //TODO meter esto en lista doctor
-                //TODO this is in the main
+                //meter esto en lista doctor
+                //this is in the main
                 //DoctorsNote doctorsNote = createDoctorsNote(medicalRecord);
                 //medicalRecord.getDoctorsNotes().add(doctorsNote);
                 return doctorsNote;
@@ -295,11 +277,7 @@ public class Patient implements Runnable{
      * Displays the DoctorsNote sent by the doctor
      */
     private void seeDoctorsNotes() {
-        //TODO here the patient chooses what record they want to see
+        //here the patient chooses what record they want to see
     }
 
-    @Override
-    public void run() {
-
-    }
 }

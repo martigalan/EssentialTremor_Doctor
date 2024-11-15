@@ -31,6 +31,13 @@ public class User implements Serializable {
     public User() {
     }
 
+    /**
+     * Constructor.
+     * @param id
+     * @param username
+     * @param password
+     * @param role
+     */
     public User(int id, String username, byte[] password, String role) {
         this.id=id;
         this.username=username;
@@ -38,6 +45,12 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    /**
+     * Constructor.
+     * @param username
+     * @param passwordBytes
+     * @param role
+     */
     public User(String username, byte[] passwordBytes, String role) {
     }
 

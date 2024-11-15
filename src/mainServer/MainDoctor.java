@@ -17,23 +17,38 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MainDoctor {
+    /**
+     * Manages inputs from console
+     */
     private static Scanner sc = new Scanner(System.in);
+    /**
+     * Socket for connection
+     */
     private static Socket socket;
+    /**
+     * Sends data to server
+     */
     private static PrintWriter printWriter;
+    /**
+     * Receives data from server
+     */
     private static BufferedReader bufferedReader;
-    private static InputStream inputStream;
+    /**
+     * Doctor object
+     */
     private static Doctor doctor;
+    /**
+     * Control variable for loops
+     */
     private static boolean control;
-    private static int option;
 
     public static void main(String[] args) {
         try {
             socket = new Socket("localhost", 9000);
             printWriter = new PrintWriter(socket.getOutputStream(), true);
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            inputStream = socket.getInputStream();
 
-            //sending the role to start the PatientHandler
+            //sending the role to start the DoctortHandler
             String role = "Doctor";
             printWriter.println(role);
 
@@ -69,20 +84,26 @@ public class MainDoctor {
                 }
             } catch (NumberFormatException | NoSuchAlgorithmException e) {
                 System.out.println("  NOT A NUMBER. Closing application... \n");
-                sc.close();
             }
         } catch (IOException e) {
             System.out.println("Error connecting to the server.");
             e.printStackTrace();
         } finally {
-            releaseResourcesDoctor(inputStream, socket);
+            releaseResourcesDoctor(bufferedReader, printWriter, socket);
             sc.close();
         }
     }
 
-    private static void releaseResourcesDoctor(InputStream inputStream, Socket socket) {
+    /**
+     * Releases resources when finishing program.
+     * @param bf BufferedReader for input.
+     * @param pw PrintWriter for output.
+     * @param socket Socket for connection.
+     */
+    private static void releaseResourcesDoctor(BufferedReader bf, PrintWriter pw, Socket socket) {
         try {
-            inputStream.close();
+            bf.close();
+            pw.close();
         } catch (IOException ex) {
             Logger.getLogger(MainDoctor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -93,7 +114,12 @@ public class MainDoctor {
             Logger.getLogger(MainDoctor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /**
+     * Registers doctor.
+     * Sends data (name, surname, username and password) to the server to store in the database.
+     * @throws IOException in case of Input/Output exception.
+     * @throws NoSuchAlgorithmException in case of encryption error.
+     */
     public static void registerDoctor() throws IOException, NoSuchAlgorithmException {
         System.out.println("Please enter doctor details:");
         String name = "", surname = "", username = "", password = "";
@@ -147,6 +173,13 @@ public class MainDoctor {
         }
     }
 
+    /**
+     * Logins doctor.
+     * The funcion sends input info (username and password) to the server to check in the database.
+     * If the info is correct, the user can access a menu to continue with the program, if the info is not correct, the user will go back and have a chance to register or login again.
+     * @throws IOException in case of Input/Output exception.
+     * @throws NoSuchAlgorithmException in case of encryption error.
+     */
     public static void login() throws IOException, NoSuchAlgorithmException {
         String command = "login";
         printWriter.println(command);
@@ -182,6 +215,9 @@ public class MainDoctor {
         }
     }
 
+    /**
+     * Main user menu.
+     */
     public static void menuUser() throws IOException {
         int option;
         MedicalRecord mr = null;
@@ -226,6 +262,9 @@ public class MainDoctor {
 
     }
 
+    /**
+     * Prints main menu.
+     */
     public static void printMenuDoctor() {
         System.out.println("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         System.out.println("@@                                                                  @@");
@@ -238,6 +277,9 @@ public class MainDoctor {
         System.out.print("\nSelect an option: ");
     }
 
+    /**
+     * Prints Register/Login menu.
+     */
     public static void printLoginMenu() {
         System.out.println("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         System.out.println("@@                                                                  @@");
@@ -251,7 +293,8 @@ public class MainDoctor {
     }
 
     /**
-     * Receive medical record sent by the doctor
+     * Receive medical record sent by the patient.
+     * The function lets the doctor choose a patient, and then a medical record from that patient.
      *
      * @return Medical Record sent by the doctor
      * @throws IOException in case connection fails
@@ -332,7 +375,11 @@ public class MainDoctor {
         return medicalRecord;
     }
 
-
+    /**
+     * This function lets the doctor choose whether to create a doctors note about a medical record previously received.
+     * @param mr received medical record.
+     * @return doctors note created over the medical record.
+     */
     public static DoctorsNote chooseToDoDoctorNotes(MedicalRecord mr) {
         System.out.println("\nDo you want to create a doctors note? (y/n)");
         String option = sc.nextLine();
@@ -349,29 +396,29 @@ public class MainDoctor {
         return dn;
     }
 
+    /**
+     * This function lets the doctor choose whether to send the doctors note to the server for storage in the database.
+     * @param dn doctors note.
+     * @throws IOException in case of Input/Output exception.
+     */
     public static void chooseToSendDoctorNotes(DoctorsNote dn) throws IOException {
         System.out.println("\nDo you want to send a doctors note? (y/n)");
         String option = sc.nextLine();
         if (option.equalsIgnoreCase("y")) {
             //doctor.sendDoctorsNote(dn, printWriter);
-            sendDoctorsNote(dn, printWriter);
+            sendDoctorsNote(dn);
         } else if (!option.equalsIgnoreCase("y") || !option.equalsIgnoreCase("n")) {
             System.out.println("Not a valid option, try again...");
             chooseToSendDoctorNotes(dn);
         }
     }
 
-    public static byte[] hexStringToByteArray(String hex) {
-        int len = hex.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
-                    + Character.digit(hex.charAt(i + 1), 16));
-        }
-        return data;
-    }
-
-    public static void sendDoctorsNote(DoctorsNote doctorsNote, PrintWriter printWriter) throws IOException {
+    /**
+     * Sends the doctors note to the server for it to be stored in the database.
+     * @param doctorsNote doctors note
+     * @throws IOException
+     */
+    public static void sendDoctorsNote(DoctorsNote doctorsNote) throws IOException {
         System.out.println("Sending text");
 
         String comment = "DoctorsNote";

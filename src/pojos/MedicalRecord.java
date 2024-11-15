@@ -54,8 +54,9 @@ public class MedicalRecord {
      */
     private List<Doctor> doctors;
 
-    private int patientId;
-    private int doctorId;
+    /**
+     *
+     */
     private int id;
 
     public int getId() {
@@ -66,27 +67,7 @@ public class MedicalRecord {
         this.id = id;
     }
 
-    public int getPatientId() {
-        return patientId;
-    }
 
-    public void setPatientId(int patientId) {
-        this.patientId = patientId;
-    }
-
-    public int getDoctorId() {
-        return doctorId;
-    }
-
-    public void setDoctorId(int doctorId) {
-        this.doctorId = doctorId;
-    }
-
-    /**
-     * Empty constructor
-     */
-    public MedicalRecord() {
-    }
 
     public List<Doctor> getDoctors() {
         return doctors;

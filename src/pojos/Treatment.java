@@ -15,11 +15,19 @@ public enum Treatment {
     PRIMIDONE(3, "The patient needs pharmacology treatment, exactly Primidone.");
 
     /**
-     * Small description of each treatment with each identifier
+     * Id of each state to simplify some tasks.
      */
     private final int id;
+    /**
+     * Small description of each treatment with each identifier
+     */
     private final String description;
 
+    /**
+     * Constructor.
+     * @param id identifier.
+     * @param description small description.
+     */
     Treatment(int id, String description) {
         this.id = id;
         this.description = description;
