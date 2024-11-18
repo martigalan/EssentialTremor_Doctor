@@ -337,7 +337,7 @@ public class MainDoctor {
         printWriter.println(mr_id);
         //obtain medical record
         MedicalRecord medicalRecord = null;
-
+        //TODO aqui da error y se va a la excepción
         response = bufferedReader.readLine();
         if (response.equals("SEND_MEDICALRECORD")) {
             String patientName = bufferedReader.readLine();
