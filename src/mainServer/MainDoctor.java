@@ -251,6 +251,7 @@ public class MainDoctor {
                     control = false;
                     //return "exit" to close communication
                     printWriter.println("exit");
+                    //TODO no funciona
                     break;
                 }
                 default: {
@@ -323,6 +324,13 @@ public class MainDoctor {
         Integer p_id = sc.nextInt();
         printWriter.println(p_id);
 
+        //checks to see if theres any MR for that patient
+        String hasMR = bufferedReader.readLine();
+        MedicalRecord medicalRecord = null;
+        if (hasMR.equals("NOT_FOUND")){
+            System.out.println("This patient doesn't have any medical records.");
+            return medicalRecord;
+        }
         //get ids and dates of the medical records from the chosen patient
         Integer numberOfMR = Integer.parseInt(bufferedReader.readLine());
         i = 0;
@@ -331,12 +339,14 @@ public class MainDoctor {
             System.out.println(response);
             i++;
         }
+
         //choose id of medical record
         System.out.println("Please choose the medical record ID: ");
+        sc.nextLine();
+        sc.nextLine();
         Integer mr_id = sc.nextInt();
         printWriter.println(mr_id);
         //obtain medical record
-        MedicalRecord medicalRecord = null;
         //TODO aqui da error y se va a la excepción
         response = bufferedReader.readLine();
         if (response.equals("SEND_MEDICALRECORD")) {
