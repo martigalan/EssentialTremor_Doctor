@@ -146,11 +146,34 @@ public class Patient{
 
     /**
      * Chooses the medical record to send
-     * @return the last Medical Record of the patients list
+     *
+     * @return the Medical Record selected by the user
      */
-    public MedicalRecord chooseMR(){ //TODO choose
+    public MedicalRecord chooseMR() {
         int size = this.getMedicalRecords().size();
-        MedicalRecord mr = this.getMedicalRecords().get(size-1);
+        if (size == 0) {
+            System.out.println("No medical records found.");
+            return null;
+        }
+
+        System.out.println("You have the following medical records available:");
+        for (int i = 0; i < size; i++) {
+            System.out.println((i + 1) + ". " + this.getMedicalRecords().get(i).toString());
+        }
+
+        Scanner sc = new Scanner(System.in);
+        int choice = -1;
+        while (choice < 1 || choice > size) {
+            System.out.print("Enter the number of the medical record you want to select: ");
+            if (sc.hasNextInt()) {
+                choice = sc.nextInt();
+            } else {
+                System.out.println("Invalid input. Please enter a valid number.");
+                sc.next();
+            }
+        }
+
+        MedicalRecord mr = this.getMedicalRecords().get(choice - 1);
         return mr;
     }
 
