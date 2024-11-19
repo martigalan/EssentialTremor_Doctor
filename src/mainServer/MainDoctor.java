@@ -41,6 +41,10 @@ public class MainDoctor {
      * Control variable for loops
      */
     private static boolean control;
+    /**
+     * Control variable for options the user chooses
+     */
+    private static int option;
 
     public static void main(String[] args) {
         try {
@@ -96,8 +100,9 @@ public class MainDoctor {
 
     /**
      * Releases resources when finishing program.
-     * @param bf BufferedReader for input.
-     * @param pw PrintWriter for output.
+     *
+     * @param bf     BufferedReader for input.
+     * @param pw     PrintWriter for output.
      * @param socket Socket for connection.
      */
     private static void releaseResourcesDoctor(BufferedReader bf, PrintWriter pw, Socket socket) {
@@ -114,10 +119,12 @@ public class MainDoctor {
             Logger.getLogger(MainDoctor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
      * Registers doctor.
      * Sends data (name, surname, username and password) to the server to store in the database.
-     * @throws IOException in case of Input/Output exception.
+     *
+     * @throws IOException              in case of Input/Output exception.
      * @throws NoSuchAlgorithmException in case of encryption error.
      */
     public static void registerDoctor() throws IOException, NoSuchAlgorithmException {
@@ -177,7 +184,8 @@ public class MainDoctor {
      * Logins doctor.
      * The funcion sends input info (username and password) to the server to check in the database.
      * If the info is correct, the user can access a menu to continue with the program, if the info is not correct, the user will go back and have a chance to register or login again.
-     * @throws IOException in case of Input/Output exception.
+     *
+     * @throws IOException              in case of Input/Output exception.
      * @throws NoSuchAlgorithmException in case of encryption error.
      */
     public static void login() throws IOException, NoSuchAlgorithmException {
@@ -219,48 +227,55 @@ public class MainDoctor {
      * Main user menu.
      */
     public static void menuUser() throws IOException {
-        int option;
         MedicalRecord mr = null;
-
-        while (true) {
-            printMenuDoctor();
-            try {
-                option = sc.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number.");
-                sc.next(); // Clear the invalid input
-                continue; // Restart the loop
-            }
-
-            switch (option) {
-                case 1: {
-                    mr = receiveMedicalRecord();
-                }
-                case 2: {
-                    if (mr != null) {
-                        doctor.showInfoMedicalRecord(mr);
-                        //option to create doctor note
-                        DoctorsNote dn = chooseToDoDoctorNotes(mr);
-                        chooseToSendDoctorNotes(dn);
+        try {
+            control = true;
+            while (control) {
+                printMenuDoctor();
+                try {
+                    if (sc.hasNextInt()) {
+                        option = sc.nextInt();
                     } else {
-                        System.out.println("No medical record detected, please select option one");
+                        option = 0;
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    sc.next();
+                    continue;
+                }
+                switch (option) {
+                    case 1: {
+                        mr = receiveMedicalRecord();
+                    }
+                    case 2: {
+                        if (mr != null) {
+                            doctor.showInfoMedicalRecord(mr);
+                            //option to create doctor note
+                            DoctorsNote dn = chooseToDoDoctorNotes(mr);
+                            chooseToSendDoctorNotes(dn);
+                        } else {
+                            System.out.println("No medical record detected, please select option one");
+                            break;
+                        }
+                    }
+                    case 0: {
+                        control = false;
+                        //return "exit" to close communication
+                        printWriter.println("exit");
+                        break;
+                    }
+                    default: {
+                        System.out.println("  NOT AN OPTION \n");
                         break;
                     }
                 }
-                case 0: {
-                    control = false;
-                    //return "exit" to close communication
-                    printWriter.println("exit");
-                    //TODO no funciona
-                    break;
-                }
-                default: {
-                    System.out.println("  NOT AN OPTION \n");
-                    break;
-                }
             }
+        } catch (NumberFormatException e) {
+            System.out.println("  NOT A NUMBER. Closing application... \n");
+            sc.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
     }
 
     /**
@@ -327,7 +342,7 @@ public class MainDoctor {
         //checks to see if theres any MR for that patient
         String hasMR = bufferedReader.readLine();
         MedicalRecord medicalRecord = null;
-        if (hasMR.equals("NOT_FOUND")){
+        if (hasMR.equals("NOT_FOUND")) {
             System.out.println("This patient doesn't have any medical records.");
             return medicalRecord;
         }
@@ -342,10 +357,8 @@ public class MainDoctor {
 
         //choose id of medical record
         System.out.println("Please choose the medical record ID: ");
-        sc.nextLine();
-        Integer mr_id = Integer.parseInt(sc.nextLine());
+        Integer mr_id = sc.nextInt();
         printWriter.println(mr_id);
-
         //obtain medical record
         //TODO aqui da error y se va a la excepción
         response = bufferedReader.readLine();
@@ -387,6 +400,7 @@ public class MainDoctor {
 
     /**
      * This function lets the doctor choose whether to create a doctors note about a medical record previously received.
+     *
      * @param mr received medical record.
      * @return doctors note created over the medical record.
      */
@@ -408,6 +422,7 @@ public class MainDoctor {
 
     /**
      * This function lets the doctor choose whether to send the doctors note to the server for storage in the database.
+     *
      * @param dn doctors note.
      * @throws IOException in case of Input/Output exception.
      */
@@ -425,6 +440,7 @@ public class MainDoctor {
 
     /**
      * Sends the doctors note to the server for it to be stored in the database.
+     *
      * @param doctorsNote doctors note
      * @throws IOException
      */
