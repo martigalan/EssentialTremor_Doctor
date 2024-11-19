@@ -343,9 +343,9 @@ public class MainDoctor {
         //choose id of medical record
         System.out.println("Please choose the medical record ID: ");
         sc.nextLine();
-        sc.nextLine();
-        Integer mr_id = sc.nextInt();
+        Integer mr_id = Integer.parseInt(sc.nextLine());
         printWriter.println(mr_id);
+
         //obtain medical record
         //TODO aqui da error y se va a la excepción
         response = bufferedReader.readLine();
