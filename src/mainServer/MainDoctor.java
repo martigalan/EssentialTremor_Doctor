@@ -61,7 +61,6 @@ public class MainDoctor {
                 control = true;
                 while (control) {
                     printLoginMenu();
-
                     try {
                         option = sc.nextInt();
                     } catch (InputMismatchException e) {
@@ -249,6 +248,7 @@ public class MainDoctor {
                     }
                     case 2: {
                         if (mr != null) {
+                            //2
                             doctor.showInfoMedicalRecord(mr);
                             //option to create doctor note
                             DoctorsNote dn = chooseToDoDoctorNotes(mr);
@@ -272,7 +272,7 @@ public class MainDoctor {
             }
         } catch (NumberFormatException e) {
             System.out.println("  NOT A NUMBER. Closing application... \n");
-            sc.close();
+            sc.next();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -345,55 +345,65 @@ public class MainDoctor {
         if (hasMR.equals("NOT_FOUND")) {
             System.out.println("This patient doesn't have any medical records.");
             return medicalRecord;
-        }
-        //get ids and dates of the medical records from the chosen patient
-        Integer numberOfMR = Integer.parseInt(bufferedReader.readLine());
-        i = 0;
-        while (i < numberOfMR) {
-            response = bufferedReader.readLine();
-            System.out.println(response);
-            i++;
-        }
-
-        //choose id of medical record
-        System.out.println("Please choose the medical record ID: ");
-        Integer mr_id = sc.nextInt();
-        printWriter.println(mr_id);
-        //obtain medical record
-        //TODO aqui da error y se va a la excepción
-        response = bufferedReader.readLine();
-        if (response.equals("SEND_MEDICALRECORD")) {
-            String patientName = bufferedReader.readLine();
-            String patientSurname = bufferedReader.readLine();
-            int age = Integer.parseInt(bufferedReader.readLine());
-            double weight = Double.parseDouble(bufferedReader.readLine());
-            int height = Integer.parseInt(bufferedReader.readLine());
-            String symptoms = bufferedReader.readLine();
-            List<String> listSymptoms = doctor.splitToStringList(symptoms);
-
-            String time = bufferedReader.readLine();
-            List<Integer> listTime = doctor.splitToIntegerList(time);
-            String acc = bufferedReader.readLine();
-            List<Integer> listAcc = doctor.splitToIntegerList(acc);
-            String emg = bufferedReader.readLine();
-            List<Integer> listEmg = doctor.splitToIntegerList(emg);
-            boolean geneticBackground = Boolean.parseBoolean(bufferedReader.readLine());
-
-            ACC acc1 = new ACC(listAcc, listTime);
-            EMG emg1 = new EMG(listEmg, listTime);
-            medicalRecord = new MedicalRecord(patientName, patientSurname, age, weight, height, listSymptoms, acc1, emg1, geneticBackground);
-            //set mr id for later use
-            medicalRecord.setId(mr_id);
-            if (medicalRecord != null) {
-                printWriter.println("MEDICALRECORD_SUCCESS");
-                doctor.getMedicalRecords().add(medicalRecord);
-                return medicalRecord;
-            } else {
-                printWriter.println("MEDICALRECORD_FAILED");
-                return medicalRecord;
+        } else if (hasMR.equals("FOUND")) {
+            //get ids and dates of the medical records from the chosen patient
+            Integer numberOfMR = Integer.parseInt(bufferedReader.readLine());
+            i = 0;
+            while (i < numberOfMR) {
+                response = bufferedReader.readLine();
+                i++;
             }
-        } else {
-            System.out.println("Failed to receive the medical record.");
+
+            //choose id of medical record
+            System.out.println("Please choose the medical record ID: ");
+            Integer mr_id = sc.nextInt();
+            printWriter.println(mr_id);
+            //obtain medical record
+            response = bufferedReader.readLine();
+            if (response.equals("SEND_MEDICALRECORD")) {
+                String patientName = bufferedReader.readLine();
+                System.out.println(patientName);
+                String patientSurname = bufferedReader.readLine();
+                System.out.println(patientSurname);
+                boolean geneticBackground = Boolean.parseBoolean(bufferedReader.readLine());
+                System.out.println(geneticBackground);
+                int age = Integer.parseInt(bufferedReader.readLine());
+                System.out.println(age);
+                double weight = Double.parseDouble(bufferedReader.readLine());
+                System.out.println(weight);
+                int height = Integer.parseInt(bufferedReader.readLine());
+                System.out.println(height);
+                String symptoms = bufferedReader.readLine();
+                System.out.println(symptoms);
+                List<String> listSymptoms = doctor.splitToStringList(symptoms);
+
+                String time = bufferedReader.readLine();
+                System.out.println(time);
+                List<Integer> listTime = doctor.splitToIntegerList(time);
+                String acc = bufferedReader.readLine();
+                System.out.println(acc);
+                List<Integer> listAcc = doctor.splitToIntegerList(acc);
+                String emg = bufferedReader.readLine();
+                System.out.println(emg);
+                List<Integer> listEmg = doctor.splitToIntegerList(emg);
+
+                ACC acc1 = new ACC(listAcc, listTime);
+                EMG emg1 = new EMG(listEmg, listTime);
+                medicalRecord = new MedicalRecord(patientName, patientSurname, age, weight, height, listSymptoms, acc1, emg1, geneticBackground);
+                //set mr id for later use
+                medicalRecord.setId(mr_id);
+                if (medicalRecord != null) {
+                    printWriter.println("MEDICALRECORD_SUCCESS");
+                    doctor.getMedicalRecords().add(medicalRecord);
+                    return medicalRecord;
+                } else {
+                    printWriter.println("MEDICALRECORD_FAILED");
+                    return medicalRecord;
+                }
+            } else {
+                System.out.println("Failed to receive the medical record.");
+            }
+            return medicalRecord;
         }
         return medicalRecord;
     }
@@ -405,6 +415,7 @@ public class MainDoctor {
      * @return doctors note created over the medical record.
      */
     public static DoctorsNote chooseToDoDoctorNotes(MedicalRecord mr) {
+        Scanner sc = new Scanner(System.in);
         System.out.println("\nDo you want to create a doctors note? (y/n)");
         String option = sc.nextLine();
         DoctorsNote dn = null;
@@ -426,9 +437,10 @@ public class MainDoctor {
      * @param dn doctors note.
      * @throws IOException in case of Input/Output exception.
      */
+    //TODO arreglar caso "n"
     public static void chooseToSendDoctorNotes(DoctorsNote dn) throws IOException {
         System.out.println("\nDo you want to send a doctors note? (y/n)");
-        String option = sc.nextLine();
+        String option = sc.nextLine(); //TODO aqui da error
         if (option.equalsIgnoreCase("y")) {
             //doctor.sendDoctorsNote(dn, printWriter);
             sendDoctorsNote(dn);
@@ -436,6 +448,7 @@ public class MainDoctor {
             System.out.println("Not a valid option, try again...");
             chooseToSendDoctorNotes(dn);
         }
+        return;
     }
 
     /**
