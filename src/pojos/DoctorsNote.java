@@ -96,4 +96,14 @@ public class DoctorsNote {
     public String getNotes() {
         return notes;
     }
+
+    @Override
+    public String toString() {
+        return "Doctors name: " + doctorName +
+                "\nDoctors surname: " + doctorSurname  +
+                "\nNotes: " + notes +
+                "\nState: " + state +
+                "\nTreatment: " + treatment +
+                "\nDate: " + date;
+    }
 }

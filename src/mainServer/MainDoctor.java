@@ -5,6 +5,7 @@ import data.EMG;
 import pojos.Doctor;
 import pojos.DoctorsNote;
 import pojos.MedicalRecord;
+import pojos.User;
 
 import java.io.*;
 import java.net.Socket;
@@ -197,6 +198,8 @@ public class MainDoctor {
         System.out.print("Password: ");
         String password = sc.nextLine();
 
+        User user = new User(username, password.getBytes(), "doctor");
+
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(password.getBytes());
         byte[] hashedPassword = md.digest();
@@ -215,6 +218,7 @@ public class MainDoctor {
             String doctorData = bufferedReader.readLine();
             String[] doctorInfo = doctorData.split("\\|");
             doctor = new Doctor(doctorInfo[0], doctorInfo[1]);
+            doctor.setUser(user);
             System.out.println("Welcome, " + doctor.getName() + " " + doctor.getSurname());
             menuUser();
         } else {
@@ -264,7 +268,7 @@ public class MainDoctor {
                         control = false;
                         //return "exit" to close communication
                         printWriter.println("exit");
-                        break;
+                        System.exit(0);
                     }
                     default: {
                         System.out.println("  NOT AN OPTION \n");
@@ -389,10 +393,12 @@ public class MainDoctor {
                 String emg = bufferedReader.readLine();
                 System.out.println(emg);
                 List<Integer> listEmg = doctor.splitToIntegerList(emg);
+                //Boolean gen_back = Boolean.valueOf(bufferedReader.readLine());
 
                 ACC acc1 = new ACC(listAcc, listTime);
                 EMG emg1 = new EMG(listEmg, listTime);
                 medicalRecord = new MedicalRecord(patientName, patientSurname, age, weight, height, listSymptoms, acc1, emg1, geneticBackground);
+
                 //set mr id for later use
                 medicalRecord.setId(mr_id);
                 if (medicalRecord != null) {
@@ -424,7 +430,7 @@ public class MainDoctor {
             sc.nextLine();
             String option = sc.nextLine();
             if (option.equalsIgnoreCase("y")) {
-                dn = doctor.createDoctorsNote(mr);
+                dn = doctor.createDoctorsNote(sc, mr);
                 if (dn != null) {
                     doctor.getDoctorsNote().add(dn);
                 }
@@ -445,13 +451,11 @@ public class MainDoctor {
      * @param dn doctors note.
      * @throws IOException in case of Input/Output exception.
      */
-    //TODO aqui da error por el Scanner
     public static void chooseToSendDoctorNotes(DoctorsNote dn) throws IOException {
         while (true) {
             System.out.println("\nDo you want to send a doctor's note? (y/n)");
-            //sc.nextLine();
-            //String option = sc.nextLine();
-            String option = "y";
+            sc.nextLine();
+            String option = sc.nextLine();
 
             if (option.equalsIgnoreCase("y")) {
                 sendDoctorsNote(dn);
@@ -491,7 +495,9 @@ public class MainDoctor {
         printWriter.flush();
 
         String approval = bufferedReader.readLine();
+
         System.out.println(approval);
+
         if (approval.equals("DOCTORNOTE_SUCCESS")) {
             System.out.println("Doctors Note sent correctly");
         } else {

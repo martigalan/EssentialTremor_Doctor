@@ -1,21 +1,10 @@
 package pojos;
 
-import data.ACC;
-import data.EMG;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Doctor {
 
-    /**
-     * User to store username and password for the application
-     */
-    private int userId;
     /**
      * Doctors name
      */
@@ -36,7 +25,10 @@ public class Doctor {
      * List of doctors notes the doctor redacts
      */
     private List<DoctorsNote> doctorsNotes;
-
+    /**
+     * User information
+     */
+    private User user;
     /**
      * Empty constructor
      */
@@ -88,6 +80,10 @@ public class Doctor {
 
     public List<DoctorsNote> getDoctorsNote() {
         return doctorsNotes;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -148,12 +144,13 @@ public class Doctor {
 
     /**
      * Creates a Doctors Note based on a Medical Record sent by the patient
+     *
+     * @param sc
      * @param medicalRecord Medical Record sent by the patient
      * @return Doctors Note with annotations about the Medical Record
      */
-    public DoctorsNote createDoctorsNote(MedicalRecord medicalRecord) {
+    public DoctorsNote createDoctorsNote(Scanner sc, MedicalRecord medicalRecord) {
         //create a note for the medical record
-        Scanner sc = new Scanner(System.in);
         System.out.println("\n Write any comments about the medical record (No enters): ");
         String comments = sc.nextLine();
         //loops to chose a state and a treatment
@@ -189,7 +186,6 @@ public class Doctor {
         doctorsNote.setMr_id(medicalRecord.getId());
         doctorsNote.setDoctorName(this.name);
         doctorsNote.setDoctorSurname(this.surname);
-        sc.close();
         medicalRecord.getDoctorsNotes().add(doctorsNote);
         this.getDoctorsNote().add(doctorsNote);
         return doctorsNote;

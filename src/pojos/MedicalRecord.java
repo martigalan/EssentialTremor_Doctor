@@ -169,17 +169,15 @@ public class MedicalRecord {
      */
     @Override
     public String toString() {
-        return "MedicalRecord{" +
-                "patientName='" + patientName + '\'' +
-                ", surname= '"+ patientSurname + '\''+
-                ", age=" + age +
-                ", weight=" + weight +
-                ", height=" + height +
-                ", symptoms=" + symptoms +
-                ", genetic_background=" + genetic_background +
-                ", acc=" + acceleration +
-                ", emg=" + emg +
-                '}';
+        return "Patients name: " + patientName +
+                "\nSurname: "+ patientSurname +
+                "\nAge: " + age +
+                "\nWeight: " + weight +
+                "\nHeight: " + height +
+                "\nSymptoms: " + symptoms +
+                "\nGenetic background: " + genetic_background +
+                "\nAcceleration data: " + acceleration +
+                "\nEMG data: " + emg;
     }
 
     /**
