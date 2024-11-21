@@ -272,6 +272,8 @@ public class Doctor {
         DoctorsNote doctorsNote = new DoctorsNote(comments, st, trt);
         //set mr_id for later use
         doctorsNote.setMr_id(medicalRecord.getId());
+        doctorsNote.setDoctorName(this.name);
+        doctorsNote.setDoctorSurname(this.surname);
         sc.close();
         medicalRecord.getDoctorsNotes().add(doctorsNote);
         this.getDoctorsNote().add(doctorsNote);
