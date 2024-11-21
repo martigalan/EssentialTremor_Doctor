@@ -44,16 +44,8 @@ public class EMG {
         return signalData;
     }
 
-    public void setSignalData(List<Integer> signalData) {
-        this.signalData = signalData;
-    }
-
     public List<Integer> getTimestamp() {
         return timestamp;
-    }
-
-    public void setTimestamp(List<Integer> timestamp) {
-        this.timestamp = timestamp;
     }
 
     /**
@@ -95,5 +87,4 @@ public class EMG {
         frame.pack();
         frame.setVisible(true);
     }
-
 }

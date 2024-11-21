@@ -67,19 +67,8 @@ public class MedicalRecord {
         this.id = id;
     }
 
-
-
-    public List<Doctor> getDoctors() {
-        return doctors;
-    }
-    public void setDoctors(List<Doctor> doctors) {
-        this.doctors = doctors;
-    }
     public List<DoctorsNote> getDoctorsNotes() {
         return doctorsNotes;
-    }
-    public void setDoctorsNotes(List<DoctorsNote> doctorsNotes) {
-        this.doctorsNotes = doctorsNotes;
     }
 
     public Boolean getGenetic_background() {
@@ -98,36 +87,12 @@ public class MedicalRecord {
         this.patientName = patientName;
     }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public void setSymptoms(List<String> symptoms) {
-        this.symptoms = symptoms;
-    }
-
     public String getPatientSurname() {
         return patientSurname;
     }
 
     public void setPatientSurname(String patientSurname) {
         this.patientSurname = patientSurname;
-    }
-
-    public void setAcceleration(ACC acceleration) {
-        this.acceleration = acceleration;
-    }
-
-    public void setEmg(EMG emg) {
-        this.emg = emg;
     }
 
     public int getAge() {

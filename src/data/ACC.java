@@ -43,18 +43,10 @@ public class ACC {
     public List<Integer> getSignalData() {
         return signalData;
     }
-    public void setSignalData(List<Integer> signalData) {
-        this.signalData = signalData;
-    }
-
+    
     public List<Integer> getTimestamp() {
         return timestamp;
     }
-
-    public void setTimestamp(List<Integer> timestamp) {
-        this.timestamp = timestamp;
-    }
-
     /**
      * String representation of acceleration
      * @return String representing acceleration

@@ -69,10 +69,6 @@ public class DoctorsNote {
         return date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
     public Integer getMr_id() {
         return mr_id;
     }
@@ -81,16 +77,8 @@ public class DoctorsNote {
         this.mr_id = mr_id;
     }
 
-    public String getDoctorName() {
-        return doctorName;
-    }
-
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
-    }
-
-    public String getDoctorSurname() {
-        return doctorSurname;
     }
 
     public void setDoctorSurname(String doctorSurname) {
@@ -101,23 +89,11 @@ public class DoctorsNote {
         return state;
     }
 
-    public void setState(State state) {
-        this.state = state;
-    }
-
     public Treatment getTreatment() {
         return treatment;
     }
 
-    public void setTreatment(Treatment treatment) {
-        this.treatment = treatment;
-    }
-
     public String getNotes() {
         return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 }
