@@ -191,7 +191,7 @@ public class MainDoctor {
         String command = "login";
         printWriter.println(command);
 
-        Scanner sc = new Scanner(System.in);
+        sc.nextLine();
         System.out.print("Username: ");
         String username = sc.nextLine();
         System.out.print("Password: ");
@@ -245,6 +245,7 @@ public class MainDoctor {
                 switch (option) {
                     case 1: {
                         mr = receiveMedicalRecord();
+                        break;
                     }
                     case 2: {
                         if (mr != null) {
@@ -253,6 +254,7 @@ public class MainDoctor {
                             //option to create doctor note
                             DoctorsNote dn = chooseToDoDoctorNotes(mr);
                             chooseToSendDoctorNotes(dn);
+                            break;
                         } else {
                             System.out.println("No medical record detected, please select option one");
                             break;
@@ -416,21 +418,26 @@ public class MainDoctor {
      * @return doctors note created over the medical record.
      */
     public static DoctorsNote chooseToDoDoctorNotes(MedicalRecord mr) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("\nDo you want to create a doctors note? (y/n)");
-        String option = sc.nextLine();
         DoctorsNote dn = null;
-        if (option.equalsIgnoreCase("y")) {
-            dn = doctor.createDoctorsNote(mr);
-            if (dn != null) {
-                doctor.getDoctorsNote().add(dn); // Inserción en la lista
+        while (true) {
+            System.out.println("\nDo you want to create a doctor's note? (y/n)");
+            sc.nextLine();
+            String option = sc.nextLine();
+            if (option.equalsIgnoreCase("y")) {
+                dn = doctor.createDoctorsNote(mr);
+                if (dn != null) {
+                    doctor.getDoctorsNote().add(dn);
+                }
+                break;
+            } else if (option.equalsIgnoreCase("n")) {
+                break;
+            } else {
+                System.out.println("Not a valid option, try again...");
             }
-        } else if (!option.equalsIgnoreCase("y") || !option.equalsIgnoreCase("n")) {
-            System.out.println("Not a valid option, try again...");
-            chooseToDoDoctorNotes(mr);
         }
         return dn;
     }
+
 
     /**
      * This function lets the doctor choose whether to send the doctors note to the server for storage in the database.
@@ -438,19 +445,26 @@ public class MainDoctor {
      * @param dn doctors note.
      * @throws IOException in case of Input/Output exception.
      */
-    //TODO arreglar caso "n"
+    //TODO aqui da error por el Scanner
     public static void chooseToSendDoctorNotes(DoctorsNote dn) throws IOException {
-        System.out.println("\nDo you want to send a doctors note? (y/n)");
-        String option = sc.nextLine(); //TODO aqui da error
-        if (option.equalsIgnoreCase("y")) {
-            //doctor.sendDoctorsNote(dn, printWriter);
-            sendDoctorsNote(dn);
-        } else if (!option.equalsIgnoreCase("y") || !option.equalsIgnoreCase("n")) {
-            System.out.println("Not a valid option, try again...");
-            chooseToSendDoctorNotes(dn);
+        while (true) {
+            System.out.println("\nDo you want to send a doctor's note? (y/n)");
+            //sc.nextLine();
+            //String option = sc.nextLine();
+            String option = "y";
+
+            if (option.equalsIgnoreCase("y")) {
+                sendDoctorsNote(dn);
+                break;
+            } else if (option.equalsIgnoreCase("n")) {
+                break;
+            } else {
+                System.out.println("Not a valid option, try again...");
+            }
         }
-        return;
     }
+
+
 
     /**
      * Sends the doctors note to the server for it to be stored in the database.
@@ -464,18 +478,20 @@ public class MainDoctor {
         String comment = "DoctorsNote";
         printWriter.println(comment);
 
-        printWriter.println(doctorsNote.getDoctorName());
-        printWriter.println(doctorsNote.getDoctorSurname());
+        printWriter.println(doctor.getName());
+        printWriter.println(doctor.getSurname());
         printWriter.println(doctorsNote.getNotes());
-        printWriter.println(doctorsNote.getState());
-        printWriter.println(doctorsNote.getTreatment());
+        printWriter.println(doctorsNote.getState().getId());
+        printWriter.println(doctorsNote.getTreatment().getId());
         String dateTxt = String.valueOf(doctorsNote.getDate());
-        //format of dateTxt = "Wed Nov 13 13:44:33 CET 2024"
         printWriter.println(dateTxt);
         //send mr_id (medical records its associated to)
         printWriter.println(doctorsNote.getMr_id());
 
+        printWriter.flush();
+
         String approval = bufferedReader.readLine();
+        System.out.println(approval);
         if (approval.equals("DOCTORNOTE_SUCCESS")) {
             System.out.println("Doctors Note sent correctly");
         } else {
