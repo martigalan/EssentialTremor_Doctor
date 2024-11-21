@@ -351,6 +351,7 @@ public class MainDoctor {
             i = 0;
             while (i < numberOfMR) {
                 response = bufferedReader.readLine();
+                System.out.println(response);
                 i++;
             }
 
