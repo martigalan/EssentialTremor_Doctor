@@ -12,7 +12,11 @@ public enum Treatment {
     /**
      * The patient needs primidone
      */
-    PRIMIDONE(3, "The patient needs pharmacology treatment, exactly Primidone.");
+    PRIMIDONE(3, "The patient needs pharmacology treatment, exactly Primidone."),
+    /**
+     * The patient doesn't need any treatment
+     */
+    NONE (4, "The patient does not need any treatment.");
 
     /**
      * Id of each state to simplify some tasks.
