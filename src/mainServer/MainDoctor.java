@@ -257,7 +257,8 @@ public class MainDoctor {
                             doctor.showInfoMedicalRecord(mr);
                             //option to create doctor note
                             DoctorsNote dn = chooseToDoDoctorNotes(mr);
-                            chooseToSendDoctorNotes(dn);
+                            //chooseToSendDoctorNotes(dn);
+                            mr = null;
                             break;
                         } else {
                             System.out.println("No medical record detected, please select option one");
@@ -423,7 +424,7 @@ public class MainDoctor {
      * @param mr received medical record.
      * @return doctors note created over the medical record.
      */
-    public static DoctorsNote chooseToDoDoctorNotes(MedicalRecord mr) {
+    public static DoctorsNote chooseToDoDoctorNotes(MedicalRecord mr) throws IOException {
         DoctorsNote dn = null;
         while (true) {
             System.out.println("\nDo you want to create a doctor's note? (y/n)");
@@ -434,6 +435,7 @@ public class MainDoctor {
                 if (dn != null) {
                     doctor.getDoctorsNote().add(dn);
                 }
+                chooseToSendDoctorNotes(dn);
                 break;
             } else if (option.equalsIgnoreCase("n")) {
                 break;
@@ -461,7 +463,7 @@ public class MainDoctor {
                 sendDoctorsNote(dn);
                 break;
             } else if (option.equalsIgnoreCase("n")) {
-                break;
+                return;
             } else {
                 System.out.println("Not a valid option, try again...");
             }
