@@ -370,29 +370,29 @@ public class MainDoctor {
             response = bufferedReader.readLine();
             if (response.equals("SEND_MEDICALRECORD")) {
                 String patientName = bufferedReader.readLine();
-                System.out.println(patientName);
+                //System.out.println(patientName);
                 String patientSurname = bufferedReader.readLine();
-                System.out.println(patientSurname);
+                //System.out.println(patientSurname);
                 boolean geneticBackground = Boolean.parseBoolean(bufferedReader.readLine());
-                System.out.println(geneticBackground);
+                //System.out.println(geneticBackground);
                 int age = Integer.parseInt(bufferedReader.readLine());
-                System.out.println(age);
+                //System.out.println(age);
                 double weight = Double.parseDouble(bufferedReader.readLine());
-                System.out.println(weight);
+                //System.out.println(weight);
                 int height = Integer.parseInt(bufferedReader.readLine());
-                System.out.println(height);
+                //System.out.println(height);
                 String symptoms = bufferedReader.readLine();
-                System.out.println(symptoms);
+                //System.out.println(symptoms);
                 List<String> listSymptoms = doctor.splitToStringList(symptoms);
 
                 String time = bufferedReader.readLine();
-                System.out.println(time);
+                //System.out.println(time);
                 List<Integer> listTime = doctor.splitToIntegerList(time);
                 String acc = bufferedReader.readLine();
-                System.out.println(acc);
+                //System.out.println(acc);
                 List<Integer> listAcc = doctor.splitToIntegerList(acc);
                 String emg = bufferedReader.readLine();
-                System.out.println(emg);
+                //System.out.println(emg);
                 List<Integer> listEmg = doctor.splitToIntegerList(emg);
                 //Boolean gen_back = Boolean.valueOf(bufferedReader.readLine());
 
