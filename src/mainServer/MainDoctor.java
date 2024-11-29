@@ -8,6 +8,7 @@ import pojos.MedicalRecord;
 import pojos.User;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -95,7 +96,7 @@ public class MainDoctor {
             }
         } catch (IOException e) {
             System.out.println("Error connecting to the server.");
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             releaseResourcesDoctor(bufferedReader, printWriter, socket);
             sc.close();
@@ -111,14 +112,14 @@ public class MainDoctor {
      */
     private static void releaseResourcesDoctor(BufferedReader bf, PrintWriter pw, Socket socket) {
         try {
-            bf.close();
-            pw.close();
+            if (bf != null) bf.close();
+            if (pw != null )pw.close();
         } catch (IOException ex) {
             Logger.getLogger(MainDoctor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try {
-            socket.close();
+            if (socket != null )socket.close();
         } catch (IOException ex) {
             Logger.getLogger(MainDoctor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -285,7 +286,7 @@ public class MainDoctor {
             System.out.println("  NOT A NUMBER. Closing application... \n");
             sc.next();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Error when connecting to the server.");
         }
     }
 
