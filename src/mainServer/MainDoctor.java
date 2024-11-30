@@ -113,13 +113,13 @@ public class MainDoctor {
     private static void releaseResourcesDoctor(BufferedReader bf, PrintWriter pw, Socket socket) {
         try {
             if (bf != null) bf.close();
-            if (pw != null )pw.close();
+            if (pw != null) pw.close();
         } catch (IOException ex) {
             Logger.getLogger(MainDoctor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try {
-            if (socket != null )socket.close();
+            if (socket != null) socket.close();
         } catch (IOException ex) {
             Logger.getLogger(MainDoctor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -258,11 +258,9 @@ public class MainDoctor {
                     }
                     case 2: {
                         if (mr != null) {
-                            //2
                             doctor.showInfoMedicalRecord(mr);
                             //option to create doctor note
                             DoctorsNote dn = chooseToDoDoctorNotes(mr);
-                            //chooseToSendDoctorNotes(dn);
                             mr = null;
                             break;
                         } else {
@@ -351,74 +349,92 @@ public class MainDoctor {
         Integer p_id = sc.nextInt();
         printWriter.println(p_id);
 
-        //checks to see if theres any MR for that patient
-        String hasMR = bufferedReader.readLine();
         MedicalRecord medicalRecord = null;
-        if (hasMR.equals("NOT_FOUND")) {
-            System.out.println("This patient doesn't have any medical records.");
-            return medicalRecord;
-        } else if (hasMR.equals("FOUND")) {
-            //get ids and dates of the medical records from the chosen patient
-            Integer numberOfMR = Integer.parseInt(bufferedReader.readLine());
-            i = 0;
-            while (i < numberOfMR) {
-                response = bufferedReader.readLine();
-                System.out.println(response);
-                i++;
-            }
 
-            //choose id of medical record
-            System.out.println("Please choose the medical record ID: ");
-            Integer mr_id = sc.nextInt();
-            printWriter.println(mr_id);
-            //obtain medical record
-            response = bufferedReader.readLine();
-            if (response.equals("SEND_MEDICALRECORD")) {
-                String patientName = bufferedReader.readLine();
-                //System.out.println(patientName);
-                String patientSurname = bufferedReader.readLine();
-                //System.out.println(patientSurname);
-                boolean geneticBackground = Boolean.parseBoolean(bufferedReader.readLine());
-                //System.out.println(geneticBackground);
-                int age = Integer.parseInt(bufferedReader.readLine());
-                //System.out.println(age);
-                double weight = Double.parseDouble(bufferedReader.readLine());
-                //System.out.println(weight);
-                int height = Integer.parseInt(bufferedReader.readLine());
-                //System.out.println(height);
-                String symptoms = bufferedReader.readLine();
-                //System.out.println(symptoms);
-                List<String> listSymptoms = doctor.splitToStringList(symptoms);
+        String exists = bufferedReader.readLine();
+        if (exists.equals("NULL")) {
+            System.out.println("No patient found with that ID.");
+        } else {
+            //checks to see if theres any MR for that patient
+            String hasMR = bufferedReader.readLine();
+            if (hasMR.equals("NOT_FOUND")) {
+                System.out.println("This patient doesn't have any medical records.");
+                return medicalRecord;
+            } else if (hasMR.equals("FOUND")) {
+                //get ids and dates of the medical records from the chosen patient
+                Integer numberOfMR = Integer.parseInt(bufferedReader.readLine());
+                i = 0;
+                while (i < numberOfMR) {
+                    response = bufferedReader.readLine();
+                    System.out.println(response);
+                    i++;
+                }
 
-                String time = bufferedReader.readLine();
-                //System.out.println(time);
-                List<Integer> listTime = doctor.splitToIntegerList(time);
-                String acc = bufferedReader.readLine();
-                //System.out.println(acc);
-                List<Integer> listAcc = doctor.splitToIntegerList(acc);
-                String emg = bufferedReader.readLine();
-                //System.out.println(emg);
-                List<Integer> listEmg = doctor.splitToIntegerList(emg);
-                //Boolean gen_back = Boolean.valueOf(bufferedReader.readLine());
+                //choose id of medical record
+                System.out.println("Please choose the medical record ID: ");
+                Integer mr_id = sc.nextInt();
+                printWriter.println(mr_id);
 
-                ACC acc1 = new ACC(listAcc, listTime);
-                EMG emg1 = new EMG(listEmg, listTime);
-                medicalRecord = new MedicalRecord(patientName, patientSurname, age, weight, height, listSymptoms, acc1, emg1, geneticBackground);
-
-                //set mr id for later use
-                medicalRecord.setId(mr_id);
-                if (medicalRecord != null) {
-                    printWriter.println("MEDICALRECORD_SUCCESS");
-                    doctor.getMedicalRecords().add(medicalRecord);
-                    return medicalRecord;
+                //check if it exists
+                String mrNull = bufferedReader.readLine();
+                if (mrNull.equals("NULL")) {
+                    System.out.println("No medical record found for that ID.");
                 } else {
-                    printWriter.println("MEDICALRECORD_FAILED");
+                    String mrCorrect = bufferedReader.readLine();
+                    if (mrCorrect.equals("NOT_CORRECT")){
+                        System.out.println("No medical record with that ID found for this patient.");
+                    } else {
+                        //obtain medical record
+                        response = bufferedReader.readLine();
+                        if (response.equals("SEND_MEDICALRECORD")) {
+                            String patientName = bufferedReader.readLine();
+                            //System.out.println(patientName);
+                            String patientSurname = bufferedReader.readLine();
+                            //System.out.println(patientSurname);
+                            boolean geneticBackground = Boolean.parseBoolean(bufferedReader.readLine());
+                            //System.out.println(geneticBackground);
+                            int age = Integer.parseInt(bufferedReader.readLine());
+                            //System.out.println(age);
+                            double weight = Double.parseDouble(bufferedReader.readLine());
+                            //System.out.println(weight);
+                            int height = Integer.parseInt(bufferedReader.readLine());
+                            //System.out.println(height);
+                            String symptoms = bufferedReader.readLine();
+                            //System.out.println(symptoms);
+                            List<String> listSymptoms = doctor.splitToStringList(symptoms);
+
+                            String time = bufferedReader.readLine();
+                            //System.out.println(time);
+                            List<Integer> listTime = doctor.splitToIntegerList(time);
+                            String acc = bufferedReader.readLine();
+                            //System.out.println(acc);
+                            List<Integer> listAcc = doctor.splitToIntegerList(acc);
+                            String emg = bufferedReader.readLine();
+                            //System.out.println(emg);
+                            List<Integer> listEmg = doctor.splitToIntegerList(emg);
+                            //Boolean gen_back = Boolean.valueOf(bufferedReader.readLine());
+
+                            ACC acc1 = new ACC(listAcc, listTime);
+                            EMG emg1 = new EMG(listEmg, listTime);
+                            medicalRecord = new MedicalRecord(patientName, patientSurname, age, weight, height, listSymptoms, acc1, emg1, geneticBackground);
+
+                            //set mr id for later use
+                            medicalRecord.setId(mr_id);
+                            if (medicalRecord != null) {
+                                printWriter.println("MEDICALRECORD_SUCCESS");
+                                doctor.getMedicalRecords().add(medicalRecord);
+                                return medicalRecord;
+                            } else {
+                                printWriter.println("MEDICALRECORD_FAILED");
+                                return medicalRecord;
+                            }
+                        } else {
+                            System.out.println("Failed to receive the medical record.");
+                        }
+                    }
                     return medicalRecord;
                 }
-            } else {
-                System.out.println("Failed to receive the medical record.");
             }
-            return medicalRecord;
         }
         return medicalRecord;
     }
@@ -474,7 +490,6 @@ public class MainDoctor {
             }
         }
     }
-
 
 
     /**
