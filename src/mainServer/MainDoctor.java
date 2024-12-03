@@ -73,10 +73,10 @@ public class MainDoctor {
 
             String base64PublicKey = bufferedReader.readLine();
 
-            //decodificar la clave pública
+            //decodify public key
             byte[] decodedKey = Base64.getDecoder().decode(base64PublicKey);
 
-            //crear clave pública
+            //create public key
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedKey);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             publicKey = (RSAPublicKey) keyFactory.generatePublic(keySpec);
